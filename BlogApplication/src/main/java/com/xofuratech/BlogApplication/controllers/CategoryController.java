@@ -2,6 +2,7 @@ package com.xofuratech.BlogApplication.controllers;
 
 import com.xofuratech.BlogApplication.payloads.CategoryDto;
 import com.xofuratech.BlogApplication.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,14 @@ public class CategoryController {
     // TODO: Implement CRUD operations for Category entity
     // Create
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto createCategory = categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }
 
     // Update
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId) {
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId) {
         CategoryDto updatedCategory = categoryService.updateCategory(categoryDto, categoryId);
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
