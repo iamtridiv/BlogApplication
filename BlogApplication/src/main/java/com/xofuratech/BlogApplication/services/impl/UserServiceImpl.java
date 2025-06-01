@@ -1,12 +1,14 @@
 package com.xofuratech.BlogApplication.services.impl;
 
 import com.xofuratech.BlogApplication.entities.User;
+import com.xofuratech.BlogApplication.exceptions.ResourceNotFoundException;
 import com.xofuratech.BlogApplication.payloads.UserDto;
 import com.xofuratech.BlogApplication.repositories.UserRepo;
 import com.xofuratech.BlogApplication.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, int userId) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int userId) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         return userToUserDto(user);
     }
 
@@ -43,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int userId) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         userRepo.delete(user);
     }
 
