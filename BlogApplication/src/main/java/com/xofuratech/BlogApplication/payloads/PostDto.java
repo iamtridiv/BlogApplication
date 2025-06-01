@@ -15,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class PostDto {
     // Validation needs to be added later
+    private Integer postId;
     private String title;
     private String content;
     private String imageName;
