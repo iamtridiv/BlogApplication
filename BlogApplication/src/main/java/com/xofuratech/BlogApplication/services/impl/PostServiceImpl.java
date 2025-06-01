@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -66,12 +68,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsByCategory(Integer categoryId) {
-        return List.of();
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+        List<Post> posts = postRepo.findByCategory(category);
+        return posts.stream()
+                .map((post) -> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public List<PostDto> getPostsByUser(Integer userId) {
-        return List.of();
+        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        List<Post> users = postRepo.findByUser(user);
+        return users.stream()
+                .map((post -> modelMapper.map(post, PostDto.class)))
+                .collect(Collectors.toList());
     }
 
     @Override
