@@ -3,12 +3,16 @@ package com.xofuratech.BlogApplication.controllers;
 import com.xofuratech.BlogApplication.config.AppConstant;
 import com.xofuratech.BlogApplication.payloads.PostDto;
 import com.xofuratech.BlogApplication.payloads.PostResponse;
+import com.xofuratech.BlogApplication.services.FileService;
 import com.xofuratech.BlogApplication.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -16,6 +20,12 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.image}")
+    private String path;
     // Create
     @PostMapping("/users/{userId}/categories/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,
@@ -76,4 +86,22 @@ public class PostController {
         List<PostDto> postDtos = postService.searchPosts(keywords);
         return new ResponseEntity<>(postDtos, HttpStatus.OK);
     }
+
+    // post image upload
+    @PostMapping("/posts/image/upload/{postId}")
+    public ResponseEntity<PostDto> uploadPostImage(
+            @RequestParam("image")MultipartFile image,
+            @PathVariable Integer postId) throws IOException {
+        PostDto postDto = this.postService.getPostById(postId);
+        String fileName = fileService.uploadImage(path, image);
+        postDto.setImageName(fileName);
+        PostDto updatePost = postService.updatePost(postDto, postId);
+        return new ResponseEntity<>(updatePost, HttpStatus.OK);
+
+    }
+
+    // Method to serve files
+    // Need to implement later
+
+
 }
