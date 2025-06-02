@@ -7,9 +7,8 @@ import com.xofuratech.BlogApplication.repositories.UserRepo;
 import com.xofuratech.BlogApplication.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.lang.module.ResolutionException;
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,8 +18,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public UserDto createUser(UserDto userDto) {
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepo.save(userDtoToUser(userDto));
         return userToUserDto(savedUser);
     }
