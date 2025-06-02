@@ -11,10 +11,12 @@ import com.xofuratech.BlogApplication.repositories.PostRepo;
 import com.xofuratech.BlogApplication.repositories.UserRepo;
 import com.xofuratech.BlogApplication.services.PostService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.description.annotation.AnnotationValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -73,8 +75,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
-        Pageable p = PageRequest.of(pageNumber, pageSize);
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy) {
+        Pageable p = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).descending());
         Page<Post> pagePost = postRepo.findAll(p);
         List<Post> allPosts = pagePost.getContent();
         List<PostDto> postDtos = allPosts.stream()
