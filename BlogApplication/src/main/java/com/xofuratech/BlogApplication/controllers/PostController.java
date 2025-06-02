@@ -1,9 +1,9 @@
 package com.xofuratech.BlogApplication.controllers;
 
+import com.xofuratech.BlogApplication.config.AppConstant;
 import com.xofuratech.BlogApplication.payloads.PostDto;
 import com.xofuratech.BlogApplication.payloads.PostResponse;
 import com.xofuratech.BlogApplication.services.PostService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +42,9 @@ public class PostController {
     // get All Posts
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPosts(
-                                            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-                                            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-                                            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy) {
+                                            @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
+                                            @RequestParam(value = "pageSize", defaultValue = AppConstant.PAGE_SIZE, required = false) Integer pageSize,
+                                            @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY, required = false) String sortBy) {
         PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize, sortBy);
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
@@ -68,5 +68,12 @@ public class PostController {
     public ResponseEntity<String> deletePost(@PathVariable Integer postId) {
         postService.deletePost(postId);
         return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
+    }
+
+    // search Posts
+    @GetMapping("/posts/search/{keywords}")
+    public ResponseEntity<List<PostDto>> searchPosts(@PathVariable String keywords) {
+        List<PostDto> postDtos = postService.searchPosts(keywords);
+        return new ResponseEntity<>(postDtos, HttpStatus.OK);
     }
 }
