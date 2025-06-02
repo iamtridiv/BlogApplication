@@ -1,6 +1,7 @@
 package com.xofuratech.BlogApplication.controllers;
 
 import com.xofuratech.BlogApplication.payloads.PostDto;
+import com.xofuratech.BlogApplication.payloads.PostResponse;
 import com.xofuratech.BlogApplication.services.PostService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,11 @@ public class PostController {
 
     // get All Posts
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(
-                                            @RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+    public ResponseEntity<PostResponse> getAllPosts(
+                                            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
                                             @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
-        List<PostDto> posts = postService.getAllPosts(pageNumber, pageSize);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+        PostResponse postResponse = postService.getAllPosts(pageNumber, pageSize);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
     // get Post by Id

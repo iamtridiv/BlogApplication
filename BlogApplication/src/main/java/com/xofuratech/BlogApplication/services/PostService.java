@@ -2,6 +2,7 @@ package com.xofuratech.BlogApplication.services;
 
 import com.xofuratech.BlogApplication.entities.Post;
 import com.xofuratech.BlogApplication.payloads.PostDto;
+import com.xofuratech.BlogApplication.payloads.PostResponse;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface PostService {
     PostDto getPostById(Integer postId);
 
     // Get All Posts
-    List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     // Get all Posts by Category
     List<PostDto> getPostsByCategory(Integer categoryId);
